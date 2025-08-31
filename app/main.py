@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import List
 
 
 class Person:
@@ -11,7 +11,10 @@ class Person:
 
 
 def create_person_list(people_data: List[dict]) -> List[Person]:
-    person_list: List[Person] = [Person(data["name"], data["age"]) for data in people_data]
+    person_list: List[Person] = [Person(data["name"],
+                                        data["age"]
+                                        )
+                                 for data in people_data]
 
     for data in people_data:
         current_person = Person.people.get(data["name"])
