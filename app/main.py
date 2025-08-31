@@ -2,12 +2,12 @@ from typing import Optional, List
 
 
 class Person:
-    people = []
+    people = {}
 
     def __init__(self, name: str, age: int) -> None:
         self.name = name
         self.age = age
-        self.people.append(self)
+        self.people[name] = self
 
 
 def get_person_from_list_by_name(
