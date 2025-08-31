@@ -11,50 +11,26 @@ class Person:
 
 
 def get_person_from_list_by_name(
-    people: List[Person],
-    expected_name: str
+    people: List[Person], expected_name: str
 ) -> Optional[Person]:
-
-    for person in people:
-        if expected_name == person.name:
-            return person
-    return None
+    return next((p for p in people if p.name == expected_name), None)
 
 
-def create_person_list(
-    people_data: List[dict]
-) -> List[Person]:
-    result: List[Person] = []
+def create_person_list(people_data: List[dict]) -> List[Person]:
+    result: List[Person] = [Person(d["name"], d["age"]) for d in people_data]
 
-    for person_info in people_data:
-        result.append(
-            Person(
-                person_info["name"],
-                person_info["age"]
-            )
-        )
-
-    for person_info in people_data:
-        pers = get_person_from_list_by_name(
-            result,
-            person_info["name"]
-        )
-
-        if person_info.get("wife"):
-            wife = get_person_from_list_by_name(
-                result,
-                person_info["wife"]
-            )
-            if pers and wife:
-                pers.wife = wife
-                wife.husband = pers
-        elif person_info.get("husband"):
-            husband = get_person_from_list_by_name(
-                result,
-                person_info["husband"]
-            )
-            if pers and husband:
-                pers.husband = husband
-                husband.wife = pers
+    for d in people_data:
+        pers = get_person_from_list_by_name(result, d["name"])
+        if pers:
+            if d.get("wife"):
+                wife = get_person_from_list_by_name(result, d["wife"])
+                if wife:
+                    pers.wife = wife
+                    wife.husband = pers
+            elif d.get("husband"):
+                husband = get_person_from_list_by_name(result, d["husband"])
+                if husband:
+                    pers.husband = husband
+                    husband.wife = pers
 
     return result
